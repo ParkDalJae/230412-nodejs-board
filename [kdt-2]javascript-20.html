@@ -1,0 +1,83 @@
+<!-- KDT-2 아무도 직접 만들어서 사용하지 않지만. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const createTabMenu = (tabNames, tapContent) => {
+        const tabMenuContainer = document.getElementById("root");
+        const tabMenu = document.createElement("ul");
+        tabMenu.style.listStyleType = "none";
+        tabMenu.style.padding = 0;
+
+        const tabButtons = tabNames.map((name, i) => {
+          const tabButton = document.createElement("li");
+          tabButton.textContent = name; //
+          //
+          tabButton.style.dispaly = "black";
+          tabButton.style.padding = "10px";
+          tabButton.style.border = "1px #ccc solid";
+          //
+          tabButton.addEventListener("click", (event) => {
+            //
+            const index = tabButtons.indexOf(event.target);
+            //
+            //
+            const tabContentContainer = tabMenuContainer.querySelector(
+              "[data-tab-content-container]"
+            );
+            if (tabContentContainer) {
+              tabContentsElements.forEach((element, j) => {
+                element.style.dispaly = j === index ? "black" : "none";
+              });
+            }
+            //
+            tabButtons.forEach((button, j) => {
+              button.style.backgroundColor = j === index ? "#ccc" : "#fff";
+              button.style.color = j === index ? "#fff" : "#000";
+            });
+          });
+          tabMenu.appendChild(tabButton);
+          return tabButton;
+        });
+        //
+        tabButtons[0].style.backgroundColor = "#ccc";
+        tabButtons[0].style.color = "#fff";
+        //
+        const tabContentContainer = document.createElement("div");
+        tabContentContainer.setAttribute("data-tab-content-container", "");
+        //
+        const tabContentsElements = tabContents.map((content, i) => {
+          const tabContentsElement = document.createElement("div");
+          tabContentsElement.appendChild(content);
+          if (i !== 0) {
+            tabContentsElement.style.display = "none";
+          }
+          return tabContentsElement;
+        });
+        //
+        tabContentsElements.reduce((prev, curr) => {
+          prev.appendChild(curr);
+          return prev;
+        }, tabContentContainer);
+        tabMenuContainer.appendChild(tabMenu);
+        tabMenuContainer.appendChild(tabContentContainer);
+      };
+      console.dir(createTabMenu);
+      //
+      const tabNames = ["web", "front-end", "framework"];
+      const tabContents = [
+        document.createTextNode("React.js"),
+        document.createTextNode("Vue.js"),
+        document.createTextNode("Angular.js"),
+      ];
+      createTabMenu(tabNames, tabContents);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!-- KDT-2 아무도 직접 만들어서 사용하지 않지만. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const createTabMenu = (tabNames, tapContent) => {
+        const tabMenuContainer = document.getElementById("root");
+        const tabMenu = document.createElement("ul");
+        tabMenu.style.listStyleType = "none";
+        tabMenu.style.padding = 0;
+
+        const tabButtons = tabNames.map((name, i) => {
+          const tabButton = document.createElement("li");
+          tabButton.textContent = name; //매개변수 name을 탭버튼의 텍스트로 설정
+          //탭버튼의 스타일
+          tabButton.style.dispaly = "black";
+          tabButton.style.padding = "10px";
+          tabButton.style.border = "1px #ccc solid";
+          //탭버튼 모든 요소에 click 이벤츠 추가
+          tabButton.addEventListener("click", (event) => {
+            //탭 버튼의 인덱스를 구하는 indexOf()메서드와 event object 객체의 target 속성을 사용
+            const index = tabButtons.indexOf(event.target);
+            //css의 속성 선택자 활용한 에제 attribute selector라고도 부르며,
+            //이것을 domAPI 객체에서는 dataset 이라는 속성으로 액세스 할 수 있다.
+            const tabContentContainer = tabMenuContainer.querySelector(
+              "[data-tab-content-container]"
+            );
+            if (tabContentContainer) {
+              //아래의 forEach() 두번째 매개변수 j는 index이다. 상위 반복문에서 i를 사용하기 때문에 구분하였다.
+              tabContentsElements.forEach((element, j) => {
+                element.style.dispaly = j === index ? "black" : "none";
+              });
+            }
+            //복잡해 보이지만 단순 스타일링 삼항연산자로 처리
+            tabButtons.forEach((button, j) => {
+              button.style.backgroundColor = j === index ? "#ccc" : "#fff";
+              button.style.color = j === index ? "#fff" : "#000";
+            });
+          });
+          tabMenu.appendChild(tabButton);
+          return tabButton; //tabButton, 상수 tabButtons는 함수가 호출될때 배열을 반환한다.
+        });
+        //탭 버튼의 첫번째 요소에 고정적으로 스타일링
+        tabButtons[0].style.backgroundColor = "#ccc";
+        tabButtons[0].style.color = "#fff";
+
+        const tabContentContainer = document.createElement("div");
+        tabContentContainer.setAttribute("data-tab-content-container", "");
+        //.map()매서드의 사용성이 매우 높은것을 확인할 수 있다.
+        const tabContentsElements = tabContents.map((content, i) => {
+          const tabContentsElement = document.createElement("div");
+          tabContentsElement.appendChild(content);
+          if (i !== 0) {
+            tabContentsElement.style.display = "none";
+          }
+          return tabContentsElement;
+        });
+        //prev는 이전에 반환된 값이고, curr(current)은 현재의 배열 요소이다.
+        tabContentsElements.reduce((prev, curr) => {
+          prev.appendChild(curr);
+          return prev;
+        }, tabContentContainer);
+        tabMenuContainer.appendChild(tabMenu);
+        tabMenuContainer.appendChild(tabContentContainer);
+      };
+      console.dir(createTabMenu);
+      //결과적으로 배열 두개를 인자(argument)로 받아서 복잡한 탭 메뉴를 생성한다.
+      const tabNames = ["web", "front-end", "framework"];
+      const tabContents = [
+        document.createTextNode("React.js"),
+        document.createTextNode("Vue.js"),
+        document.createTextNode("Angular.js"),
+      ];
+      createTabMenu(tabNames, tabContents);
+    </script>
+  </body>
+</html>
